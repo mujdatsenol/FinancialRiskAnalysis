@@ -1,5 +1,6 @@
 ﻿using FinancialRiskAnalysis.Application;
 using FinancialRiskAnalysis.Application.Abstractions;
+using FinancialRiskAnalysis.Common.Services.Helper;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FinancialRiskAnalysis.Infrastructure.Extensions;
@@ -11,8 +12,10 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IBusinessContractService, BusinessContractService>();
         services.AddTransient<IBusinessTopicService, BusinessTopicService>();
         services.AddTransient<IPartnerService, PartnerService>();
-        // services.AddTransient<IPartnerContractSerice, PartnerContractService>();
+        services.AddTransient<IPartnerContractSerice, PartnerContractService>();
         services.AddTransient<IRiskAnalysisService, RiskAnalysisService>();
+
+        services.AddTransient<IServiceResponseHelper, ServiceResponseHelper>();
     }
 
     public static void RegisterMapper(this IServiceCollection services)

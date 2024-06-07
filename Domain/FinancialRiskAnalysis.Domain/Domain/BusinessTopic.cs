@@ -8,6 +8,10 @@ public class BusinessTopic : IEntity, IEntity<Guid>
 
     public Guid BusinessContractId { get; set; }
 
+    public virtual Partner Partner { get; set; }
+
+    public virtual BusinessContract BusinessContract { get; set; }
+
     public string Title { get; set; }
 
     public string Description { get; set; }
