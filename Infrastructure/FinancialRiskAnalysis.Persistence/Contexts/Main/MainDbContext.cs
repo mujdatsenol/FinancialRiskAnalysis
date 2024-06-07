@@ -27,15 +27,16 @@ public class MainDbContext : DbContext
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            // if (!optionsBuilder.IsConfigured)
-            // {
-            //     string connectionString = "Data Source=.\\SQLEXPRESS;Database=FinancialRiskAnalysis;Integrated Security=true;TrustServerCertificate=Yes";
-            //     string migrationsAssembly = "FinancialRiskAnalysis.Persistence";
+            // NOTE: CLI ile migration üretirken sorun yaşadım. Geçici bir çözüm olarak ekledim.
+            if (!optionsBuilder.IsConfigured)
+            {
+                string connectionString = "Data Source=.\\SQLEXPRESS;Database=FinancialRiskAnalysis;Integrated Security=true;TrustServerCertificate=Yes";
+                string migrationsAssembly = "FinancialRiskAnalysis.Persistence";
 
-            //     optionsBuilder.UseSqlServer(
-            //         connectionString,
-            //         opt => opt.MigrationsAssembly(migrationsAssembly));
-            // }
+                optionsBuilder.UseSqlServer(
+                    connectionString,
+                    opt => opt.MigrationsAssembly(migrationsAssembly));
+            }
 
             base.OnConfiguring(optionsBuilder);
         }
@@ -44,10 +45,10 @@ public class MainDbContext : DbContext
         {
             base.OnModelCreating(builder);
 
-            // builder.Entity<BusinessContract>(BusinessContractMappings.OnModelCreating);
-            // builder.Entity<BusinessTopic>(BusinessTopicMappings.OnModelCreating);
-            // builder.Entity<Partner>(BPartnerMappings.OnModelCreating);
-            // builder.Entity<PartnerContract>(MPartnerContractMappings.OnModelCreating);
-            // builder.Entity<RiskAnalysis>(RiskAnalysisMappings.OnModelCreating);
+            builder.Entity<BusinessContract>(BusinessContractMappings.OnModelCreating);
+            builder.Entity<BusinessTopic>(BusinessTopicMappings.OnModelCreating);
+            builder.Entity<Partner>(PartnerMappings.OnModelCreating);
+            builder.Entity<PartnerContract>(PartnerContractMappings.OnModelCreating);
+            builder.Entity<RiskAnalysis>(RiskAnalysisMappings.OnModelCreating);
         }
 }
