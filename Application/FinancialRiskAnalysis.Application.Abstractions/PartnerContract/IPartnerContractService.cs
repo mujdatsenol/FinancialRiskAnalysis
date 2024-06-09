@@ -2,7 +2,7 @@
 
 namespace FinancialRiskAnalysis.Application.Abstractions;
 
-public interface IPartnerContractSerice : IApplicationService
+public interface IPartnerContractService : IApplicationService
 {
 
 }

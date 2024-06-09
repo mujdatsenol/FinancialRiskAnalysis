@@ -1,5 +1,4 @@
 ﻿using FinancialRiskAnalysis.Application.Abstractions;
-using FinancialRiskAnalysis.Common.Services;
 
 namespace FinancialRiskAnalysis.Api.Endpoint;
 
@@ -7,12 +6,12 @@ public static class PartnerEndpoint
 {
     public static RouteGroupBuilder MapPartner(this RouteGroupBuilder map)
     {
-        map.MapGroup("partner").Map();
+        map.MapGroup("Partner").Map();
 
         return map;
     }
 
-    public static RouteGroupBuilder Map(this RouteGroupBuilder map)
+    private static RouteGroupBuilder Map(this RouteGroupBuilder map)
     {
         map.MapGet("/", async (IPartnerService partnerService) =>
         {
@@ -20,6 +19,34 @@ public static class PartnerEndpoint
             return result;
         })
         .WithName("GetAllPartner")
+        .WithOpenApi();
+
+        map.MapGet("/{partnerId}", async (IPartnerService partnerService, Guid partnerId) =>
+        {
+
+        })
+        .WithName("GetPartner")
+        .WithOpenApi();
+
+        map.MapPost("/", async (IPartnerService partnerService) =>
+        {
+
+        })
+        .WithName("CreatePartner")
+        .WithOpenApi();
+
+        map.MapPut("/{partnerId}", async (IPartnerService partnerService, Guid partnerId) =>
+        {
+
+        })
+        .WithName("UpdatePartner")
+        .WithOpenApi();
+
+        map.MapDelete("/{partnerId}", async (IPartnerService partnerService, Guid partnerId) =>
+        {
+
+        })
+        .WithName("DeletePartner")
         .WithOpenApi();
 
         return map;

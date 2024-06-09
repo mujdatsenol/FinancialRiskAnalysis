@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace FinancialRiskAnalysis.Application;
 
-public class PartnerContractService : IPartnerContractSerice
+public class PartnerContractService : IPartnerContractService
 {
     private readonly IDataManager dataManager;
     private readonly IRepository<PartnerContract> partnerContractRepository;
