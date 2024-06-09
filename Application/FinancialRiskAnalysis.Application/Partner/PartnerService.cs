@@ -31,6 +31,13 @@ public class PartnerService : IPartnerService
 
     public async Task<ServiceResponse<List<PartnerDto>>> GetPartners()
     {
+        return this.serviceResponseHelper.SetSuccess(new List<PartnerDto>{
+            new PartnerDto() {
+                Id = new Guid(),
+                Name = "test"
+            }
+        });
+
         var result = await this.partnerRepository.GetListAsync().ConfigureAwait(false);
 
         var dtoResult = this.mapper.Map<List<PartnerDto>>(result);

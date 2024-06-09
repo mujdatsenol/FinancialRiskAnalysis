@@ -1,8 +1,32 @@
-﻿namespace FinancialRiskAnalysis.Api.Endpoint;
+﻿using FinancialRiskAnalysis.Application.Abstractions;
+using FinancialRiskAnalysis.Common.Services;
+
+namespace FinancialRiskAnalysis.Api.Endpoint;
 
 public static class PartnerEndpoint
 {
-    public static void Map(this WebApplication app)
+    public static RouteGroupBuilder MapPartner(this RouteGroupBuilder map)
+    {
+        map.MapGroup("partner").Map();
+
+        return map;
+    }
+
+    public static RouteGroupBuilder Map(this RouteGroupBuilder map)
+    {
+        map.MapGet("/", async (IPartnerService partnerService) =>
+        {
+            var result = await partnerService.GetPartners().ConfigureAwait(false);
+            return result;
+        })
+        .WithName("GetAllPartner")
+        .WithOpenApi();
+
+        return map;
+    }
+
+    // Single map test
+    public static void MapSingle(this WebApplication app)
     {
         var summaries = new[]
         {

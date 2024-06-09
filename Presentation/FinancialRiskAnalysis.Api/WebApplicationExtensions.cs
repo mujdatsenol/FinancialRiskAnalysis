@@ -6,6 +6,11 @@ public static class WebApplicationExtensions
 {
     public static void RegisterEndpoints(this WebApplication app)
     {
-        PartnerEndpoint.Map(app);
+        app.MapGroup("api")
+            .MapPartner()
+            .WithTags("Partner");
+        
+        // Single map test
+        PartnerEndpoint.MapSingle(app);
     }
 }
