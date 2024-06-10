@@ -18,6 +18,8 @@ public static class PartnerMappings
             .WithOne(o => o.Partner)
             .OnDelete(DeleteBehavior.Cascade);
 
+        builder.ToTable(name: "Partner");
+
         SeedData(builder);
     }
 

@@ -16,6 +16,8 @@ public static class PartnerContractMappings
             .WithMany(m => m.PartnerContracts)
             .OnDelete(DeleteBehavior.Cascade);
 
+        builder.ToTable(name: "PartnerContract");
+
         SeedData(builder);
     }
 
