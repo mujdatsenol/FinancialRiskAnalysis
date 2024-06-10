@@ -1,5 +1,7 @@
-﻿using AutoMapper;
+﻿using System.Net;
+using AutoMapper;
 using FinancialRiskAnalysis.Application.Abstractions;
+using FinancialRiskAnalysis.Common.Services;
 using FinancialRiskAnalysis.Common.Services.Helper;
 using FinancialRiskAnalysis.Domain;
 using Microsoft.Extensions.Configuration;
@@ -26,5 +28,65 @@ public class RiskAnalysisService : IRiskAnalysisService
         this.configuration = configuration;
         this.serviceResponseHelper = serviceResponseHelper;
         this.mapper = mapper;
+    }
+
+    public async Task<ServiceResponse<List<RiskAnalysisDto>>> GetRiskAnalyses()
+    {
+        var result = await this.riskAnalysisRepository.GetListAsync().ConfigureAwait(false);
+        var dtoResult = this.mapper.Map<List<RiskAnalysisDto>>(result);
+
+        return this.serviceResponseHelper.SetSuccess(dtoResult);
+    }
+
+    public async Task<ServiceResponse<RiskAnalysisDto>> GetRiskAnalysis(Guid id)
+    {
+        var result = await this.riskAnalysisRepository
+            .GetFirstOrDefaultAsync(g => g.Id == id).ConfigureAwait(false);
+        if (result == null)
+        {
+            return this.serviceResponseHelper.SetError<RiskAnalysisDto>(
+                null,
+                "Bir risk analizi bulanamadı!",
+                (int)HttpStatusCode.NotFound);
+        }
+
+        var dtoResult = this.mapper.Map<RiskAnalysisDto>(result);
+
+        return this.serviceResponseHelper.SetSuccess(dtoResult);
+    }
+
+    public async Task<ServiceResponse> CreateRiskAnalysis(CreateRiskAnalysisRequest request)
+    {
+        await this.riskAnalysisRepository.AddAsync(
+            new RiskAnalysis()
+            {
+                Id = Guid.NewGuid(),
+                BusinessTopicId = request.BusinessTopicId,
+                RiskScore = request.RiskScore,
+                CreateDate = DateTime.UtcNow
+            })
+            .ConfigureAwait(false);
+
+        return this.serviceResponseHelper.SetSuccess();
+    }
+
+    public async Task<ServiceResponse> UpdateRiskAnalysis(Guid id, UpdateRiskAnalysisRequest request)
+    {
+        var riskAnalysis = await this.riskAnalysisRepository
+            .GetFirstOrDefaultAsync(g => g.Id == id).ConfigureAwait(false);
+        if (riskAnalysis == null)
+        {
+            return this.serviceResponseHelper.SetError(
+                "Güncellenecek bir risk analizi bulanamadı!",
+                (int)HttpStatusCode.NotFound);
+        }
+
+        riskAnalysis.BusinessTopicId = request.BusinessTopicId;
+        riskAnalysis.RiskScore = request.RiskScore;
+        riskAnalysis.UpdateDate = DateTime.UtcNow;
+
+        await this.riskAnalysisRepository.UpdateAsync(riskAnalysis);
+
+        return this.serviceResponseHelper.SetSuccess();
     }
 }

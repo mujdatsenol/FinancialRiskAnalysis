@@ -12,7 +12,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IBusinessContractService, BusinessContractService>();
         services.AddTransient<IBusinessTopicService, BusinessTopicService>();
         services.AddTransient<IPartnerService, PartnerService>();
-        services.AddTransient<IPartnerContractSerice, PartnerContractService>();
+        services.AddTransient<IPartnerContractService, PartnerContractService>();
         services.AddTransient<IRiskAnalysisService, RiskAnalysisService>();
 
         services.AddTransient<IServiceResponseHelper, ServiceResponseHelper>();

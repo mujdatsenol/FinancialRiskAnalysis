@@ -1,7 +1,9 @@
 ﻿namespace FinancialRiskAnalysis.Application.Abstractions;
 
-public class BusinessTopicDto : DtoHasBaseId<Guid>
+public class UpdateBusinessTopicRequest
 {
+    public Guid Id { get; set; }
+    
     public Guid PartnerId { get; set; }
 
     public Guid BusinessContractId { get; set; }
@@ -9,10 +11,4 @@ public class BusinessTopicDto : DtoHasBaseId<Guid>
     public string Title { get; set; }
 
     public string Description { get; set; }
-
-    public DateTime CreateDate { get; set; }
-
-    public DateTime? UpdateDate { get; set; }
-
-    public IList<RiskAnalysisDto> RiskAnalyses { get; set; }
 }

@@ -1,8 +1,66 @@
-﻿namespace FinancialRiskAnalysis.Api.Endpoint;
+﻿using FinancialRiskAnalysis.Application.Abstractions;
+using Microsoft.AspNetCore.Mvc;
+
+namespace FinancialRiskAnalysis.Api.Endpoint;
 
 public static class PartnerEndpoint
 {
-    public static void Map(this WebApplication app)
+    public static RouteGroupBuilder MapPartner(this RouteGroupBuilder map)
+    {
+        map.MapGroup("Partner").Map();
+
+        return map;
+    }
+
+    private static RouteGroupBuilder Map(this RouteGroupBuilder map)
+    {
+        map.MapGet("/", async (IPartnerService partnerService) =>
+        {
+            var result = await partnerService.GetPartners().ConfigureAwait(false);
+            return result;
+        })
+        .WithName("GetAllPartner")
+        .WithOpenApi();
+
+        map.MapGet("/{partnerId}", async (IPartnerService partnerService, Guid partnerId) =>
+        {
+            var result = await partnerService.GetPartner(partnerId).ConfigureAwait(false);
+            return result;
+        })
+        .WithName("GetPartner")
+        .WithOpenApi();
+
+        map.MapPost("/", async (IPartnerService partnerService, [FromBody] CreatePartnerRequest request) =>
+        {
+            var result = await partnerService.CreatePartner(request);
+            return result;
+        })
+        .WithName("CreatePartner")
+        .WithOpenApi();
+
+        map.MapPut("/{partnerId}", async (
+            IPartnerService partnerService,
+            [FromRoute] Guid partnerId,
+            [FromBody] UpdatePartnerRequest request) =>
+        {
+            var result = await partnerService.UpdatePartner(partnerId, request);
+            return result;
+        })
+        .WithName("UpdatePartner")
+        .WithOpenApi();
+
+        map.MapDelete("/{partnerId}", async (IPartnerService partnerService, Guid partnerId) =>
+        {
+            return Results.BadRequest("Bu özellik kullanılmıyor!");
+        })
+        .WithName("DeletePartner")
+        .WithOpenApi();
+
+        return map;
+    }
+
+    // Single map test
+    public static void MapSingle(this WebApplication app)
     {
         var summaries = new[]
         {

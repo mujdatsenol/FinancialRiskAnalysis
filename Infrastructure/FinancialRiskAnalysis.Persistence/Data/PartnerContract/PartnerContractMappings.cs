@@ -15,5 +15,13 @@ public static class PartnerContractMappings
         builder.HasOne(o => o.BusinessContract)
             .WithMany(m => m.PartnerContracts)
             .OnDelete(DeleteBehavior.Cascade);
+
+        SeedData(builder);
+    }
+
+    private static void SeedData(EntityTypeBuilder<PartnerContract> builder)
+    {
+        var partnerContracts = PartnerContractSeed.PartnerContracts();
+        builder.HasData(partnerContracts);
     }
 }
