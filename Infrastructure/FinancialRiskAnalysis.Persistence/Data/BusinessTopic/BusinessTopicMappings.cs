@@ -22,6 +22,8 @@ public static class BusinessTopicMappings
             .WithOne(o => o.BusinessTopic)
             .OnDelete(DeleteBehavior.Cascade);
 
+        builder.ToTable(name: "BusinessTopic");
+
         SeedData(builder);
     }
 

@@ -14,6 +14,8 @@ public static class RiskAnalysisMappings
             .WithMany(m => m.RiskAnalyses)
             .OnDelete(DeleteBehavior.Cascade);
 
+        builder.ToTable(name: "RiskAnalysis");
+
         SeedData(builder);
     }
 

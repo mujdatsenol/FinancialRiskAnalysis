@@ -18,6 +18,8 @@ public static class BusinessContractMappings
             .WithOne(o => o.BusinessContract)
             .OnDelete(DeleteBehavior.Cascade);
 
+        builder.ToTable(name: "BusinessContract");
+
         SeedData(builder);
     }
 
