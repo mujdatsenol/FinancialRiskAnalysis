@@ -30,7 +30,7 @@ public class MainDbContext : DbContext
             // NOTE: CLI ile migration üretirken sorun yaşadım. Geçici bir çözüm olarak ekledim.
             if (!optionsBuilder.IsConfigured)
             {
-                string connectionString = "Data Source=localhost,1433;database=FinancialRiskAnalysis;user id=sa;password=reallyStrongPwd123;TrustServerCertificate=Yes";
+                string connectionString = "<your_connectionString>";
                 string migrationsAssembly = "FinancialRiskAnalysis.Persistence";
 
                 optionsBuilder.UseSqlServer(
