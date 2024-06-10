@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="PartnerContract/Contracts/" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Infrastructure\FinancialRiskAnalysis.Common\FinancialRiskAnalysis.Common.csproj" />
   </ItemGroup>
 

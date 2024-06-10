@@ -21,5 +21,13 @@ public static class BusinessTopicMappings
         builder.HasMany(m => m.RiskAnalyses)
             .WithOne(o => o.BusinessTopic)
             .OnDelete(DeleteBehavior.Cascade);
+
+        SeedData(builder);
+    }
+
+    private static void SeedData(EntityTypeBuilder<BusinessTopic> builder)
+    {
+        var businessTopics = BusinessTopicSeed.BusinessTopics();
+        builder.HasData(businessTopics);
     }
 }

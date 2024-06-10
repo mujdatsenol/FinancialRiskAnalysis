@@ -1,6 +1,6 @@
 ﻿namespace FinancialRiskAnalysis.Domain;
 
-public class RiskAnalysis : IEntity, IEntity<Guid>
+public class RiskAnalysis : IEntity, IEntity<Guid>, ICreated, IUpdated
 {
     public Guid Id { get; set; }
 
@@ -11,4 +11,8 @@ public class RiskAnalysis : IEntity, IEntity<Guid>
     public double RiskScore { get; set; }
 
     public DateTime AnalysisDate { get; set; }
+
+    public DateTime CreateDate { get; set; }
+
+    public DateTime? UpdateDate { get; set; }
 }

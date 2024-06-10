@@ -1,10 +1,16 @@
 ﻿namespace FinancialRiskAnalysis.Domain;
 
-public class PartnerContract : IEntity
+public class PartnerContract : IEntity, IEntity<Guid>, ICreated, IUpdated
 {
-    public int PartnerId { get; set; }
+    public Guid Id { get; set; }
+
+    public Guid PartnerId { get; set; }
     
-    public int BusinessContractId { get; set; }
+    public Guid BusinessContractId { get; set; }
+
+    public DateTime CreateDate { get; set; }
+
+    public DateTime? UpdateDate { get; set; }
 
     public virtual Partner Partner { get; set; }
 

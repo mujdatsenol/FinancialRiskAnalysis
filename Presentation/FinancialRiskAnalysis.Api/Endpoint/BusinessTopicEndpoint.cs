@@ -1,4 +1,5 @@
 ﻿using FinancialRiskAnalysis.Application.Abstractions;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FinancialRiskAnalysis.Api.Endpoint;
 
@@ -15,35 +16,42 @@ public static class BusinessTopicEndpoint
     {
         map.MapGet("/", async (IBusinessTopicService businessTopicService) =>
         {
-            
+            var result = await businessTopicService.GetBusinessTopics().ConfigureAwait(false);
+            return result;
         })
         .WithName("GetAllBusinessTopic")
         .WithOpenApi();
 
         map.MapGet("/{businessTopicId}", async (IBusinessTopicService businessTopicService, Guid businessTopicId) =>
         {
-
+            var result = await businessTopicService.GetBusinessTopic(businessTopicId).ConfigureAwait(false);
+            return result;
         })
         .WithName("GetBusinessTopic")
         .WithOpenApi();
 
-        map.MapPost("/", async (IBusinessTopicService businessTopicService) =>
+        map.MapPost("/", async (IBusinessTopicService businessTopicService, [FromBody] CreateBusinessTopicRequest request) =>
         {
-
+            var result = await businessTopicService.CreateBusinessTopic(request);
+            return result;
         })
         .WithName("CreateBusinessTopic")
         .WithOpenApi();
 
-        map.MapPut("/{businessTopicId}", async (IBusinessTopicService businessTopicService, Guid businessTopicId) =>
+        map.MapPut("/{businessTopicId}", async (
+            IBusinessTopicService businessTopicService,
+            [FromRoute] Guid businessTopicId,
+            [FromBody] UpdateBusinessTopicRequest request) =>
         {
-
+            var result = await businessTopicService.UpdateBusinessTopic(businessTopicId, request);
+            return result;
         })
         .WithName("UpdateBusinessTopic")
         .WithOpenApi();
 
         map.MapDelete("/{businessTopicId}", async (IBusinessTopicService businessTopicService, Guid businessTopicId) =>
         {
-
+            return Results.BadRequest("Bu özellik kullanılmıyor!");
         })
         .WithName("DeleteBusinessTopic")
         .WithOpenApi();

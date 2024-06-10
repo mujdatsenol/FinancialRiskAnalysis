@@ -1,4 +1,5 @@
 ﻿using FinancialRiskAnalysis.Application.Abstractions;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FinancialRiskAnalysis.Api.Endpoint;
 
@@ -23,28 +24,34 @@ public static class PartnerEndpoint
 
         map.MapGet("/{partnerId}", async (IPartnerService partnerService, Guid partnerId) =>
         {
-
+            var result = await partnerService.GetPartner(partnerId).ConfigureAwait(false);
+            return result;
         })
         .WithName("GetPartner")
         .WithOpenApi();
 
-        map.MapPost("/", async (IPartnerService partnerService) =>
+        map.MapPost("/", async (IPartnerService partnerService, [FromBody] CreatePartnerRequest request) =>
         {
-
+            var result = await partnerService.CreatePartner(request);
+            return result;
         })
         .WithName("CreatePartner")
         .WithOpenApi();
 
-        map.MapPut("/{partnerId}", async (IPartnerService partnerService, Guid partnerId) =>
+        map.MapPut("/{partnerId}", async (
+            IPartnerService partnerService,
+            [FromRoute] Guid partnerId,
+            [FromBody] UpdatePartnerRequest request) =>
         {
-
+            var result = await partnerService.UpdatePartner(partnerId, request);
+            return result;
         })
         .WithName("UpdatePartner")
         .WithOpenApi();
 
         map.MapDelete("/{partnerId}", async (IPartnerService partnerService, Guid partnerId) =>
         {
-
+            return Results.BadRequest("Bu özellik kullanılmıyor!");
         })
         .WithName("DeletePartner")
         .WithOpenApi();
