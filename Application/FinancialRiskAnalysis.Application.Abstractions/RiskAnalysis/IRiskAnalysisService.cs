@@ -4,6 +4,8 @@ namespace FinancialRiskAnalysis.Application.Abstractions;
 
 public interface IRiskAnalysisService : IApplicationService
 {
+    Task<ServiceResponse<PagedResultDto<RiskAnalysisDto>>> Search(RiskAnalysisTableRequest request);
+
     Task<ServiceResponse<List<RiskAnalysisDto>>> GetRiskAnalyses();
 
     Task<ServiceResponse<RiskAnalysisDto>> GetRiskAnalysis(Guid id);

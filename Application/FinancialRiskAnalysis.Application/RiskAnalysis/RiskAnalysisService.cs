@@ -4,6 +4,7 @@ using FinancialRiskAnalysis.Application.Abstractions;
 using FinancialRiskAnalysis.Common.Services;
 using FinancialRiskAnalysis.Common.Services.Helper;
 using FinancialRiskAnalysis.Domain;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace FinancialRiskAnalysis.Application;
@@ -28,6 +29,37 @@ public class RiskAnalysisService : IRiskAnalysisService
         this.configuration = configuration;
         this.serviceResponseHelper = serviceResponseHelper;
         this.mapper = mapper;
+    }
+
+    public async Task<ServiceResponse<PagedResultDto<RiskAnalysisDto>>> Search(RiskAnalysisTableRequest request)
+    {
+        var records = await this.riskAnalysisRepository
+            .GetPagedListAsync(
+                predicate: p =>
+                    (request.RiskScore == null || request.RiskScore == 0
+                        ? true
+                        : p.RiskScore == request.RiskScore),
+                orderBy: null,
+                include: null, //i => i.Include(i => i.BusinessTopic),
+                pageIndex: request.PageNumber,
+                pageSize: request.PageSize,
+                indexFrom: 1)
+            .ConfigureAwait(false);
+
+        var items = this.mapper.Map<List<RiskAnalysisDto>>(records.Items);
+
+        var result = new PagedResultDto<RiskAnalysisDto>
+        {
+            PagedList = items,
+            RowCount = records.TotalCount,
+            PageCount = records.TotalPages,
+            CurrentPage = request.PageNumber,
+            PageSize = request.PageSize,
+            HasNextPage = request.PageNumber < records.TotalPages ? true : false,
+            HasPreviousPage = request.PageNumber > 1 ? true : false,
+        };
+
+        return this.serviceResponseHelper.SetSuccess(result);
     }
 
     public async Task<ServiceResponse<List<RiskAnalysisDto>>> GetRiskAnalyses()

@@ -14,6 +14,16 @@ public static class RiskAnalysisEndpoint
 
     private static RouteGroupBuilder Map(this RouteGroupBuilder map)
     {
+        map.MapPost("/search", async (
+            IRiskAnalysisService riskAnalysisService,
+            [FromBody] RiskAnalysisTableRequest request) =>
+        {
+            var result = await riskAnalysisService.Search(request).ConfigureAwait(false);
+            return result;
+        })
+        .WithName("SearchRiskAnalysis")
+        .WithOpenApi();
+
         map.MapGet("/", async (IRiskAnalysisService riskAnalysisService) =>
         {
             var result = await riskAnalysisService.GetRiskAnalyses().ConfigureAwait(false);

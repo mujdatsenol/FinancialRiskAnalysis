@@ -4,6 +4,8 @@ public class RiskAnalysisDto : DtoHasBaseId<Guid>
 {
     public Guid BusinessTopicId { get; set; }
 
+    public BusinessTopicDto BusinessTopic { get; set; }
+
     public double RiskScore { get; set; }
 
     public DateTime CreateDate { get; set; }

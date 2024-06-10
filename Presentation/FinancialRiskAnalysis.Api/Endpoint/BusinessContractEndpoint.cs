@@ -14,6 +14,16 @@ public static class BusinessContractEndpoint
 
     private static RouteGroupBuilder Map(this RouteGroupBuilder map)
     {
+        map.MapPost("/search", async (
+            IBusinessContractService businessContractService,
+            [FromBody] BusinessContractTableRequest request) =>
+        {
+            var result = await businessContractService.Search(request).ConfigureAwait(false);
+            return result;
+        })
+        .WithName("SearchBusinessContract")
+        .WithOpenApi();
+
         map.MapGet("/", async (IBusinessContractService businessContractService) =>
         {
             var result = await businessContractService.GetBusinessContracts().ConfigureAwait(false);

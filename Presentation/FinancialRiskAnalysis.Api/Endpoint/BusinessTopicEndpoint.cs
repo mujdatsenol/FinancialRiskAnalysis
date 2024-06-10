@@ -14,6 +14,16 @@ public static class BusinessTopicEndpoint
 
     private static RouteGroupBuilder Map(this RouteGroupBuilder map)
     {
+        map.MapPost("/search", async (
+            IBusinessTopicService businessTopicService,
+            [FromBody] BusinesTopicTableRequest request) =>
+        {
+            var result = await businessTopicService.Search(request).ConfigureAwait(false);
+            return result;
+        })
+        .WithName("SearchBusinessTopic")
+        .WithOpenApi();
+        
         map.MapGet("/", async (IBusinessTopicService businessTopicService) =>
         {
             var result = await businessTopicService.GetBusinessTopics().ConfigureAwait(false);
