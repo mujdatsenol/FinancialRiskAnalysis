@@ -30,6 +30,40 @@ public class BusinessTopicService : IBusinessTopicService
         this.mapper = mapper;
     }
 
+    public async Task<ServiceResponse<PagedResultDto<BusinessTopicDto>>> Search(BusinesTopicTableRequest request)
+    {
+        var records = await this.businessTopicRepository
+            .GetPagedListAsync(
+                predicate: p =>
+                    (string.IsNullOrWhiteSpace(request.Title)
+                        ? true
+                        : p.Title.Contains(request.Title))
+                    && (string.IsNullOrWhiteSpace(request.Description)
+                        ? true
+                        : p.Description.Contains(request.Description)),
+                orderBy: null,
+                include: null,
+                pageIndex: request.PageNumber,
+                pageSize: request.PageSize,
+                indexFrom: 1)
+            .ConfigureAwait(false);
+
+        var items = this.mapper.Map<List<BusinessTopicDto>>(records.Items);
+
+        var result = new PagedResultDto<BusinessTopicDto>
+        {
+            PagedList = items,
+            RowCount = records.TotalCount,
+            PageCount = records.TotalPages,
+            CurrentPage = request.PageNumber,
+            PageSize = request.PageSize,
+            HasNextPage = request.PageNumber < records.TotalPages ? true : false,
+            HasPreviousPage = request.PageNumber > 1 ? true : false,
+        };
+
+        return this.serviceResponseHelper.SetSuccess(result);
+    }
+
     public async Task<ServiceResponse<List<BusinessTopicDto>>> GetBusinessTopics()
     {
         var result = await this.businessTopicRepository.GetListAsync().ConfigureAwait(false);

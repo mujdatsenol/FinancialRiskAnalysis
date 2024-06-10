@@ -4,6 +4,8 @@ namespace FinancialRiskAnalysis.Application.Abstractions;
 
 public interface IPartnerService : IApplicationService
 {
+    Task<ServiceResponse<PagedResultDto<PartnerDto>>> Search(PartnerTableRequest request);
+
     Task<ServiceResponse<List<PartnerDto>>> GetPartners();
 
     Task<ServiceResponse<PartnerDto>> GetPartner(Guid id);

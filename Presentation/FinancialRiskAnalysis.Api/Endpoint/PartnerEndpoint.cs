@@ -14,6 +14,16 @@ public static class PartnerEndpoint
 
     private static RouteGroupBuilder Map(this RouteGroupBuilder map)
     {
+        map.MapPost("/search", async (
+            IPartnerService partnerService,
+            [FromBody] PartnerTableRequest request) =>
+        {
+            var result = await partnerService.Search(request).ConfigureAwait(false);
+            return result;
+        })
+        .WithName("SearchPartner")
+        .WithOpenApi();
+
         map.MapGet("/", async (IPartnerService partnerService) =>
         {
             var result = await partnerService.GetPartners().ConfigureAwait(false);

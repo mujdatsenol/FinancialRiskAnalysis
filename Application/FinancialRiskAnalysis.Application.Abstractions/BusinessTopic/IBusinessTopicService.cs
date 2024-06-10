@@ -4,6 +4,8 @@ namespace FinancialRiskAnalysis.Application.Abstractions;
 
 public interface IBusinessTopicService : IApplicationService
 {
+    Task<ServiceResponse<PagedResultDto<BusinessTopicDto>>> Search(BusinesTopicTableRequest request);
+    
     Task<ServiceResponse<List<BusinessTopicDto>>> GetBusinessTopics();
 
     Task<ServiceResponse<BusinessTopicDto>> GetBusinessTopic(Guid id);

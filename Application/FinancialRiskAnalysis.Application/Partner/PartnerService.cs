@@ -30,6 +30,37 @@ public class PartnerService : IPartnerService
         this.mapper = mapper;
     }
 
+    public async Task<ServiceResponse<PagedResultDto<PartnerDto>>> Search(PartnerTableRequest request)
+    {
+        var records = await this.partnerRepository
+            .GetPagedListAsync(
+                predicate: p =>
+                    (string.IsNullOrWhiteSpace(request.Name)
+                        ? true
+                        : p.Name.Contains(request.Name)),
+                orderBy: null,
+                include: null,
+                pageIndex: request.PageNumber,
+                pageSize: request.PageSize,
+                indexFrom: 1)
+            .ConfigureAwait(false);
+
+        var items = this.mapper.Map<List<PartnerDto>>(records.Items);
+
+        var result = new PagedResultDto<PartnerDto>
+        {
+            PagedList = items,
+            RowCount = records.TotalCount,
+            PageCount = records.TotalPages,
+            CurrentPage = request.PageNumber,
+            PageSize = request.PageSize,
+            HasNextPage = request.PageNumber < records.TotalPages ? true : false,
+            HasPreviousPage = request.PageNumber > 1 ? true : false,
+        };
+
+        return this.serviceResponseHelper.SetSuccess(result);
+    }
+
     public async Task<ServiceResponse<List<PartnerDto>>> GetPartners()
     {
         var result = await this.partnerRepository.GetListAsync().ConfigureAwait(false);
